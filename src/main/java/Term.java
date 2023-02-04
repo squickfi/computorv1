@@ -1,7 +1,3 @@
-package fortytwo.computor;
-
-import java.math.BigDecimal;
-
 public class Term {
 
     private double multiplier;

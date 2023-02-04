@@ -1,6 +1,3 @@
-package fortytwo.computor;
-
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 

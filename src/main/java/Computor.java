@@ -1,5 +1,3 @@
-package fortytwo.computor;
-
 import static java.lang.System.exit;
 
 public class Computor {
