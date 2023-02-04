@@ -1,6 +1,5 @@
 package fortytwo.computor;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -11,7 +10,7 @@ public class EquationParser {
     private static final Pattern number = Pattern.compile("\\d+(.\\d+)?");
     private static final Pattern multiplicationSign = Pattern.compile(" *\\* *");
     private static final Pattern equationSign = Pattern.compile(" *= *");
-    private static final Pattern sign = Pattern.compile("( *(\\+|-) *)?"); // TODO
+    private static final Pattern sign = Pattern.compile("( *(\\+|-) *)?");
     private static final Pattern variable = Pattern.compile("X(\\^\\d+)?");
     private static final Pattern termRegEx = Pattern.compile(
             "(" + sign + number + multiplicationSign + variable
@@ -32,12 +31,12 @@ public class EquationParser {
             for (; term.charAt(lastMultiplierIndex) != '*'; ++lastMultiplierIndex);
             for (; Character.isDigit(term.charAt(firstDegreeIndex)); --firstDegreeIndex);
             return new Term(
-                    Double.parseDouble(term.substring(0, lastMultiplierIndex)), // TODO: check String constructor
+                    Double.parseDouble(term.substring(0, lastMultiplierIndex)),
                     term.length() != firstDegreeIndex + 1 ? Integer.valueOf(term.substring(firstDegreeIndex + 1)) : 0
             );
         } else if (term.matches(number.pattern())) {
             return new Term(
-                    Double.parseDouble(term), // TODO: check String constructor for BifDecimal
+                    Double.parseDouble(term),
                     0
             );
         } else {
@@ -63,9 +62,6 @@ public class EquationParser {
         while (matcher.find()) {
             terms.add(getTermFromString(equationParts[1].substring(matcher.start(), matcher.end())).reverseMultiplierSign());
         }
-//        for (Term t : terms) {
-//            System.out.println(t);
-//        }
         return terms;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public class EquationHandler {
 
     private String equation = null;
-    private String reducedEquation;
+    private String reducedEquation = "";
     private int polynominalDegree = 0;
     private List<Term> terms;
     private List<Term> reducedTerms;
@@ -18,7 +18,7 @@ public class EquationHandler {
         ONE_SOLUTION,
         TWO_SOLUTIONS,
         INFINITE_SOLUTIONS,
-        CANT_SOLVE
+        CANT_SOLVE,
     }
     private Solution solutionStatus = Solution.UNSET;
 
@@ -57,6 +57,13 @@ public class EquationHandler {
             --polynominalDegree;
             --i;
         }
+        for (Term t : reducedTerms) {
+            reducedEquation += t.toString().replace("-", "- ").replace("+", "+ ") + " ";
+        }
+        if (reducedEquation.startsWith("+")) {
+            reducedEquation = reducedEquation.substring(2);
+        }
+        reducedEquation += "= 0";
     }
 
     public void calculate() {
@@ -73,6 +80,7 @@ public class EquationHandler {
 
         } else if (polynominalDegree == 1) {
             firstRoot = reducedTerms.get(0).getMultiplier() / (-1 * reducedTerms.get(1).getMultiplier());
+            solutionStatus = Solution.ONE_SOLUTION;
 
         } else if (polynominalDegree == 2) {
 
@@ -91,18 +99,48 @@ public class EquationHandler {
             solutionStatus = Solution.CANT_SOLVE;
             return;
         }
-        System.out.println("!!!" + firstRoot + " " + secondRoot); // TODO: remove sout
-    }
-    public String getEquation() {
-        return "";
     }
 
+    public String getEquation() {
+        return equation;
+    }
     public String getReducedForm() {
 
         if (solutionStatus == Solution.UNSET || solutionStatus == Solution.UNSOLVED) {
             throw new ArithmeticException("An equation was not calculated yet");
         }
-        return "";
+        return reducedEquation;
+    }
+    public int getPolynominalDegree() {
+        return polynominalDegree;
+    }
+
+    public String getResult() {
+        String result = "Reduced form: ";
+        result += reducedEquation;
+        result += "\nPolynomial degree: " + polynominalDegree;
+        switch (solutionStatus) {
+            case UNSET:
+                return "An equation was not set to the handler";
+            case UNSOLVED:
+                return "The equation was not calculated yet";
+            case INFINITE_SOLUTIONS:
+                return result + "\nThe equation has infinite number of solutions";
+            case NO_SOLUTIONS:
+                return result + "\nThe equation has no solutions";
+            case ONE_SOLUTION:
+                if (polynominalDegree == 2) {
+                    result += "\nDiscriminant equals to zero, there is one solution:\n";
+                } else {
+                    result += "\nThe solution is:\n";
+                }
+                return result + firstRoot;
+            case TWO_SOLUTIONS:
+                return result + "\nDiscriminant is strictly positive, the two solutions are:\n" + firstRoot + '\n' + secondRoot;
+            case CANT_SOLVE:
+                return result + "\nThe polynomial degree is strictly greater than 2, I can't solve";
+        }
+        return null;
     }
 
     @Override

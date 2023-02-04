@@ -31,7 +31,6 @@ public class Term {
 
     @Override
     public String toString() {
-        // TODO: for degree == 0
-        return multiplier + " * X^" + degree;
+        return multiplier > 0 ? "+" + multiplier + " * X^" + degree : multiplier + " * X^" + degree;
     }
 }
